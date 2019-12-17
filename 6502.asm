@@ -1,0 +1,122 @@
+dw HEX00, HEX01, HEX02, HEX03, HEX04, HEX05, HEX06, HEX07, HEX08, HEX09, HEX0A, HEX0B, HEX0C, HEX0D, HEX0E, HEX0F
+dw HEX10, HEX11, HEX12, HEX13, HEX14, HEX15, HEX16, HEX17, HEX18, HEX19, HEX1A, HEX1B, HEX1C, HEX1D, HEX1E, HEX1F
+dw HEX20, HEX21, HEX22, HEX23, HEX24, HEX25, HEX26, HEX27, HEX28, HEX29, HEX2A, HEX2B, HEX2C, HEX2D, HEX2E, HEX2F
+dw HEX30, HEX31, HEX32, HEX33, HEX34, HEX35, HEX36, HEX37, HEX38, HEX39, HEX3A, HEX3B, HEX3C, HEX3D, HEX3E, HEX3F
+dw HEX40, HEX41, HEX42, HEX43, HEX44, HEX45, HEX46, HEX47, HEX48, HEX49, HEX4A, HEX4B, HEX4C, HEX4D, HEX4E, HEX4F
+dw HEX50, HEX51, HEX52, HEX53, HEX54, HEX55, HEX56, HEX57, HEX58, HEX59, HEX5A, HEX5B, HEX5C, HEX5D, HEX5E, HEX5F
+dw HEX60, HEX61, HEX62, HEX63, HEX64, HEX65, HEX66, HEX67, HEX68, HEX69, HEX6A, HEX6B, HEX6C, HEX6D, HEX6E, HEX6F
+dw HEX70, HEX71, HEX72, HEX73, HEX74, HEX75, HEX76, HEX77, HEX78, HEX79, HEX7A, HEX7B, HEX7C, HEX7D, HEX7E, HEX7F
+dw HEX80, HEX81, HEX82, HEX83, HEX84, HEX85, HEX86, HEX87, HEX88, HEX89, HEX8A, HEX8B, HEX8C, HEX8D, HEX8E, HEX8F
+dw HEX90, HEX91, HEX92, HEX93, HEX94, HEX95, HEX96, HEX97, HEX98, HEX99, HEX9A, HEX9B, HEX9C, HEX9D, HEX9E, HEX9F
+dw HEXA0, HEXA1, HEXA2, HEXA3, HEXA4, HEXA5, HEXA6, HEXA7, HEXA8, HEXA9, HEXAA, HEXAB, HEXAC, HEXAD, HEXAE, HEXAF
+dw HEXB0, HEXB1, HEXB2, HEXB3, HEXB4, HEXB5, HEXB6, HEXB7, HEXB8, HEXB9, HEXBA, HEXBB, HEXBC, HEXBD, HEXBE, HEXBF
+dw HEXC0, HEXC1, HEXC2, HEXC3, HEXC4, HEXC5, HEXC6, HEXC7, HEXC8, HEXC9, HEXCA, HEXCB, HEXCC, HEXCD, HEXCE, HEXCF
+dw HEXD0, HEXD1, HEXD2, HEXD3, HEXD4, HEXD5, HEXD6, HEXD7, HEXD8, HEXD9, HEXDA, HEXDB, HEXDC, HEXDD, HEXDE, HEXDF
+dw HEXE0, HEXE1, HEXE2, HEXE3, HEXE4, HEXE5, HEXE6, HEXE7, HEXE8, HEXE9, HEXEA, HEXEB, HEXEC, HEXED, HEXEE, HEXEF
+dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, HEXFB, HEXFC, HEXFD, HEXFE, HEXFF
+
+;Registries
+;r0 = data
+;r1 = a
+;r2 = x
+;r3 = y
+;r4 = pc
+;r5 = s
+;r6 = p
+;r7 = Memory Address of Start of ROM
+
+;r8 temp
+;r9 temp
+
+;r10 flags
+
+;Store/Load Calls
+;LDA, N,Z
+    ;Immediate, b2, c2
+    HEXA9:
+		mov r1, r0
+		b setNZ
+		add r4, r4, #2
+    
+    ;Zero Page, b2, c3
+    HEXA5:
+		mov r9, r4
+		mov r4, r0
+		b readMemory
+		mov r4, r9
+		b HEXA9
+    
+    ;Zero Page, X, b2, c4
+    HEXB5:
+		add r0, r0, r2 ; data = data + x
+		and r0, 0xFF ; data & 0xFF
+		b ldaZP ;Jump to LDA Zero Page
+		
+    
+    ;Absolute, b3, c4
+    HEXAD:
+		mov r9, r4
+		add r4, r4, #2
+		b readMemory
+		mov r8, 0x100
+		mul r0, r0, r8
+		add r0, r0, r0
+		and r0, 0xFFFF
+		mov r4, r9
+		add r4, #1
+    
+    ;Absolute, X, b3, c4 (+1 if page crossed)
+    HEXBD:
+		add r0, r0, r2
+		b HEXAD
+    
+    ;Absolute, Y, b3, c4 (+1 if page crossed)
+    HEXB9:
+    
+    ;(Indirect, X), b2, c6
+    HEXA1:
+    
+    ;(Indirect, Y), b2, c5 (+1 if page crossed)
+    HEXB1:
+    
+;LDX, N,Z
+
+;LDY, N,Z
+
+;STA
+
+;STX
+
+;STY
+
+
+;Register Transfers
+;TAX, N,Z
+
+;TAY, N,Z
+
+;TXA, N,Z
+
+;TYA, N,Z
+
+
+;Stack Operations
+
+;Common Functions
+	;LDA Address
+	ldaAddr:
+		
+	
+	;LDA Zero Page
+	ldaZP:
+		
+	
+	;Read Memory
+	readMemory:
+		add r8, r7, r4
+		ldr r0, [r8]
+		
+	;Set Flags
+		;Set NZ
+			setNZ:
+		
