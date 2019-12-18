@@ -34,23 +34,29 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
 ;LDA, N,Z
     ;Immediate, b2, c2
     HEXA9:
+		add r4, r4, #1
+		b readMemory
 		mov r1, r0
-		b setNZ
-		add r4, r4, #2
+		add r4, r4, #1
     
     ;Zero Page, b2, c3
     HEXA5:
+		add r4, r4, #1
 		mov r9, r4
 		mov r4, r0
 		b readMemory
 		mov r4, r9
-		b HEXA9
+		mov r1, r0
+		add r4, r4, #1
     
     ;Zero Page, X, b2, c4
     HEXB5:
-		add r0, r0, r2 ; data = data + x
-		and r0, 0xFF ; data & 0xFF
-		b ldaZP ;Jump to LDA Zero Page
+		add r4, r4, #1
+		b readMemory
+		add r0, r0, r2
+		mov r0, r0 mod 0xFF
+		mov r1, r0
+		add r4, r4, #1
 		
     
     ;Absolute, b3, c4
@@ -103,20 +109,8 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
 ;Stack Operations
 
 ;Common Functions
-	;LDA Address
-	ldaAddr:
-		
-	
-	;LDA Zero Page
-	ldaZP:
-		
-	
 	;Read Memory
 	readMemory:
 		add r8, r7, r4
 		ldr r0, [r8]
-		
-	;Set Flags
-		;Set NZ
-			setNZ:
 		
