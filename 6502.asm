@@ -35,6 +35,8 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
     ;Immediate, b2, c2
     HEXA9:
 		add r4, r4, #1
+		b checkNegative
+		b checkZero
 		b readMemory
 		mov r1, r0
 		add r4, r4, #1
@@ -44,6 +46,8 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
 		add r4, r4, #1
 		mov r9, r4
 		mov r4, r0
+		b checkNegative
+		b checkZero
 		b readMemory
 		mov r4, r9
 		mov r1, r0
@@ -52,6 +56,8 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
     ;Zero Page, X, b2, c4
     HEXB5:
 		add r4, r4, #1
+		b checkNegative
+		b checkZero
 		b readMemory
 		add r0, r0, r2
 		mov r0, r0 mod 0xFF
@@ -63,6 +69,8 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
     HEXAD:
 		mov r9, r4
 		add r4, r4, #2
+		b checkNegative
+		b checkZero
 		b readMemory
 		mov r8, 0x100
 		mul r0, r0, r8
@@ -109,6 +117,49 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
 ;Stack Operations
 
 ;Common Functions
+	;Methodology with Flags:
+	;  When dealing with flags, this emulator uses r10 to store the flag byte.
+	;  As such, we must edit particular bits to modify the flags
+	;  The Flags and their bit number are as follows:
+	;	0 = C - Carry Flag, Set to 1 = 0x01
+	;	1 = Z - Zero Flag, Set to 1 = 0x02
+	;	2 = I - Interrupt Flag, Set to 1 = 0x04
+	;	3 = D - Decimal Flag, Set to 1 = 0x08
+	;	4 = B - Break Flag, Set to 1 = 0x10
+	;	5 = 1 - Always 1 Flag, Set to 1 = 0x20
+	;	6 = V - Overflow Flag, Set to 1 = 0x40
+	;	7 = N - Negative Flag, Set to 1 = 0x80
+
+	;Checks the Negative Flag
+	checkNegative:
+		mov r8, 0x7F
+		cmp r8, r4
+		bgt setNegative
+		bls clearFlag
+	
+	setNegative:
+		orr r10, r10, 0x80
+	
+	clearNegative:
+		mov r8, r10
+		sub r8, 0x80
+		and r10, r10, r8
+	
+	;Checks the Zero Flag
+	checkZero:
+		mov r8, 0x00
+		cmp r8, r4
+		beq setZero
+		bgt clearF
+		
+	setZero:
+		orr r10, r10, 0x02
+	
+	clearZero:
+		mov r8, r10
+		sub r8, 0x02
+		and r10, r10, r8
+		
 	;Read Memory
 	readMemory:
 		add r8, r7, r4
