@@ -150,7 +150,7 @@ dw HEXF0, HEXF1, HEXF2, HEXF3, HEXF4, HEXF5, HEXF6, HEXF7, HEXF8, HEXF9, HEXFA, 
 		mov r8, 0x00
 		cmp r8, r4
 		beq setZero
-		bgt clearF
+		bgt clearFlag
 		
 	setZero:
 		orr r10, r10, 0x02
