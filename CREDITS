@@ -1,0 +1,4 @@
+While making this operating system, I have recieved help from multiple sources as follows:
+
+For making the base operating system and kernel, I used the tutorials over at https://wiki.osdev.org in their Raspberry Pi Bare Bones section
+For the initial idea and influence for making a barebones emulator, I thank gberthou and his AdvanceOS on github here: https://github.com/gberthou/AdvanceOS
