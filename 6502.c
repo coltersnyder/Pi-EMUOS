@@ -1,17 +1,23 @@
-#include "kernel.h"
+#include "6502.h"
 
-struct cpuReg{
-    uint8_t A;
-    uint8_t X;
-    uint8_t Y;
-    uint8_t P;
-    uint8_t S;
-    uint16_t PC;
-} *cpuMain;
+cpuReg *cpuMain;
+
+void init(int32_t romAddr){
+    cpuMain->A = 0;
+    cpuMain->X = 0;
+    cpuMain->Y = 0;
+    cpuMain->P = 0b00000000;
+    cpuMain->S = 0;
+    cpuMain->PC = romAddr;
+    cpuMain->Clock = 0;
+}
 
 void emulate(uint8_t opcode){
     switch(opcode){
         case 0x00:
+            cpuMain->PC >> 2;
+            cpuMain->Clock += 7;
+            cpuMain->P |= 0b00110100;
             break;
         case 0x01:
             break;
