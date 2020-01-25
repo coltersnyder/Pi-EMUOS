@@ -1,8 +1,17 @@
 #include "6502.h"
 
-cpuReg *cpuMain;
+struct cpuReg{
+    uint8_t A;
+    uint8_t X;
+    uint8_t Y;
+    uint8_t P; //Flags, Order: NVssDISC
+    uint8_t S;
+    uint16_t PC;
+    uint32_t Clock;
 
-void init(int32_t romAddr){
+} *cpuMain;
+
+void init(uint32_t romAddr){
     cpuMain->A = 0;
     cpuMain->X = 0;
     cpuMain->Y = 0;
@@ -14,44 +23,44 @@ void init(int32_t romAddr){
 
 void emulate(uint8_t opcode){
     switch(opcode){
-        case 0x00:
+        case 0x00: //BRK
             cpuMain->PC >> 2;
             cpuMain->Clock += 7;
             cpuMain->P |= 0b00110100;
             break;
-        case 0x01:
+        case 0x01: //ORA ($NN,X)
             break;
-        case 0x02:
+        case 0x02: //ILLEGAL, KIL
             break;
-        case 0x03:
+        case 0x03: //ILLEGAL, SLO ($NN,X)
             break;
-        case 0x04:
+        case 0x04: //ILLEGAL, NOP $NN
             break;
-        case 0x05:
+        case 0x05: //ORA $NN
             break;
-        case 0x06:
+        case 0x06: //ASL $NN
             break;
-        case 0x07:
+        case 0x07: //ILLEGAL, SLO $NN
             break;
-        case 0x08:
+        case 0x08: //PHP
             break;
-        case 0x09:
+        case 0x09: //ORA #$NN
             break;
-        case 0x0A:
+        case 0x0A: //ASL A
             break;
-        case 0x0B:
+        case 0x0B: //ILLEGAL, ANC #$NN
             break;
-        case 0x0C:
+        case 0x0C: //ILLEGAL, NOP $NNNN
             break;
-        case 0x0D:
+        case 0x0D: //ORA $NNNN
             break;
-        case 0x0E:
+        case 0x0E: //ASL $NNNN
             break;
-        case 0x0F:
+        case 0x0F: //ILLEGAL, SLO $NNNN
             break;
-        case 0x10:
+        case 0x10: //BPL $NN
             break;
-        case 0x11:
+        case 0x11: //ORA ($NN),Y
             break;
         case 0x12:
             break;
@@ -59,15 +68,15 @@ void emulate(uint8_t opcode){
             break;
         case 0x14:
             break;
-        case 0x15:
+        case 0x15: //ORA $NN,X
             break;
-        case 0x16:
+        case 0x16: //ASL $NN,X
             break;
         case 0x17:
             break;
-        case 0x18:
+        case 0x18: //CLC
             break;
-        case 0x19:
+        case 0x19: //ORA $NNNN,Y
             break;
         case 0x1A:
             break;
@@ -75,45 +84,45 @@ void emulate(uint8_t opcode){
             break;
         case 0x1C:
             break;
-        case 0x1D:
+        case 0x1D: //ORA $NNNN,X
             break;
-        case 0x1E:
+        case 0x1E: //ASL $NNNN,X
             break;
         case 0x1F:
             break;
-        case 0x20:
+        case 0x20: //JSR $NNNN
             break;
-        case 0x21:
+        case 0x21: //AND ($NN,X)
             break;
         case 0x22:
             break;
         case 0x23:
             break;
-        case 0x24:
+        case 0x24: //BIT $NN
             break;
-        case 0x25:
+        case 0x25: //AND $NN
             break;
-        case 0x26:
+        case 0x26: //ROL $NN
             break;
         case 0x27:
             break;
-        case 0x28:
+        case 0x28: //PLP
             break;
-        case 0x29:
+        case 0x29: //AND #$NN
             break;
-        case 0x2A:
+        case 0x2A: //ROL A
             break;
         case 0x2B:
             break;
-        case 0x2C:
+        case 0x2C: //BIT $NNNN
             break;
-        case 0x2D:
+        case 0x2D: //AND $NNNN
             break;
-        case 0x2E:
+        case 0x2E: //ROL $NNNN
             break;
         case 0x2F:
             break;
-        case 0x30:
+        case 0x30: //BMI $NN
             break;
         case 0x31:
             break;
